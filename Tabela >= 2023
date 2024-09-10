@@ -1,0 +1,35 @@
+SELECT a.*
+          ,b.WAREHOUSE_DESC
+          ,b.WAREHOUSE_KEY
+          ,CASE WHEN b.WAREHOUSE_KEY IN ('3344','6270','7803','11959','10910','10898','10847','9873','7960','11932','10928','6211','1341','4901','1554','1678','9334','25178')    THEN 'SP' 
+                WHEN b.WAREHOUSE_KEY IN ('14753','11045','11061') THEN 'BA'
+                WHEN b.WAREHOUSE_KEY IN ('3506','2739') THEN 'DF'
+                WHEN b.WAREHOUSE_KEY IN ('1813') THEN 'ES' 
+                WHEN b.WAREHOUSE_KEY IN ('3379','6670') THEN 'AM'
+                WHEN b.WAREHOUSE_KEY IN ('12149') THEN 'MA'
+                WHEN b.WAREHOUSE_KEY IN ('12157','10162','10553','1996','1961','10944') THEN 'MG'
+                WHEN b.WAREHOUSE_KEY IN ('11967','4111') THEN 'PB'
+                WHEN b.WAREHOUSE_KEY IN ('14761','6610','11002','11975','8982','10995','9105') THEN 'PE'
+                WHEN b.WAREHOUSE_KEY IN ('10987','11070','10979','12165') THEN 'PR'
+                WHEN b.WAREHOUSE_KEY IN ('3786','3794') THEN 'RJ'
+                WHEN b.WAREHOUSE_KEY IN ('4618','1414','11940','13455','10952','10960','10936','11924','12173') THEN 'RS'
+                WHEN b.WAREHOUSE_KEY IN ('12181') THEN 'SC'
+                ELSE '' 
+          END UF
+          ,CASE WHEN B.WAREHOUSE_KEY IS NOT NULL 
+                  THEN trim(
+                              substr(warehouse_desc,1
+                              ,if(STRPOS(warehouse_desc,'-')-1<0,0,STRPOS(warehouse_desc,'-')-1)
+                              ))
+                  ELSE A.STO_OP_KEY 
+          END AS STO_OP_KEY_2
+    FROM `br-apps-analytics-eng-prd.db_ae_report_comercial_estoque.tbl_estoque` a 
+      left join `br-apps-mandala-prod.db_mandala_metric.D_WAREHOUSE` b
+        on a.STORE_KEY = b.warehouse_key
+        and a.IS_WAREHOUSE
+    WHERE TRUE
+      AND (DATE_KEY = CURRENT_DATE()-1
+      OR DATE_KEY = LAST_DAY(DATE_KEY,month))
+      AND DATE_KEY >= '2023-01-01'
+     AND GRP_CLASS_KEY IN ('0202042','0202043','0202044','0202047','0202048','0202049','0202050','0202051','0202053','0202143','0202144','0202145','0202146','0202147','0202148','0202149','0202253','0202254','0202255','0202256','0202257','0202258','0202259','0202261','0202262','0202263','0202264','0202269','0202319','0202320','0202322','0202328','0202329','0202330','0202331','0202332','0202437','0202438','0202439','0202442','0202443','0202444','0202447','0202448','0202449','0202450','0202451','0202534','0202535','0202536'
+)
